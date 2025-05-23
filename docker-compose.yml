@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  3x-ui:
+    container_name: 3x-ui
+    image: debian:bullseye-slim
+    command: >
+      bash -c "
+      apt update &&
+      apt install -y wget curl unzip socat cron bash &&
+      wget -N --no-check-certificate https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh &&
+      chmod +x install.sh &&
+      ./install.sh &&
+      3x-ui run
+      "
+    ports:
+      - "54321:54321"
+      - "443:443"
+      - "80:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 550M
+    stdin_open: true
+    tty: true
